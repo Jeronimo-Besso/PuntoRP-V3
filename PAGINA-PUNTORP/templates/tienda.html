@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+    </head>
+    <body class="body-tienda">
+        <nav>
+            <img class="logo" src="{{ url_for('static', filename='IMGS/Adobe_Vectors_-_Download_Free_High-Quality_Vectors_from_Freepik___Freepik.jpg') }}" alt="LOGO">
+                <div>
+                    <a href="/tienda">Tienda</a>    
+                    <a href="/">Inicio</a>
+                    <a href="/normas">Normas</a>
+                    <a href="https://discord.gg/eUejUWDHNc">Contactanos</a>
+                </div>
+                            {% if steam_user %}
+                <div style="display:flex; align-items:center; gap:5px;">
+                    <img class="steam-avatar" src="{{ steam_user.avatar }}" alt="">
+                    <span>{{ steam_user.personaname }}</span>
+                    <a href="{{ url_for('logout') }}"><button>Logout</button></a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('login') }}"class="login-link">Iniciar Sesion</a>
+{% endif %}
+        </nav>
+        <div class="titulo-tienda" style="color:white">Tienda oficial <strong>PUNTORP</strong></div>
+        <div class="contendor-cajas2" id="contenedor-cajas">
+        <button class="cajas1"  onclick="store_select(1)" id="caja1-store"></button>
+        <button class="cajas1"  onclick="store_select(2)" id="caja2-store"></button>
+        <button class="cajas1"  onclick="store_select(3)" id="caja3-store"></button>
+        <button class="cajas1"  onclick="store_select(4)" id="caja4-store"></button>
+        <button class="cajas1"  onclick="store_select(5)" id="caja5-store"></buttton>
+        <button class="cajas1" onclick="store_select(6)" id="caja6-store" ></button>
+        </div>
+    </body>
+    <script>
+        function store_select(arg){
+            switch (arg)
+            {
+                case 1:
+                htmlMembresias = cargarMembresiaHtml();
+                break
+                case 2:
+                    htmlVehiculos = cargarVehiculosHtml();
+                    break
+                case 3:
+                    htmlMafias = cargarMafiaHtml();
+                    break
+                case 4:
+                    htmlCoins = cargarCoinsHtml();
+                    break
+                case 5:
+                    htmlKeys = cargarKeysHtml();
+                    break
+                case 6:
+                    htmlPeds  = cargarPedsHtml();
+                    break
+
+            }
+        
+            
+        }
+        function cargarMembresiaHtml() {
+        html = getMembresiasHtml() //hay q cargarlo todavia
+        document.getElementById("contenedor-cajas").innerHTML = html;
+
+        
+    }
+    </script>
+</html>
