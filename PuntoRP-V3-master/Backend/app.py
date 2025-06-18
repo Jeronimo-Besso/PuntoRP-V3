@@ -67,6 +67,13 @@ class Membresias(db.Model):
         else:
             return mafia
 
+    def eliminarMembresias(cls, nombre):
+        membresia_eliminar = db.session.query(cls).filter_by(Nombre=nombre)
+        if membresia_eliminar:
+            db.session.delete(membresia_eliminar)
+            db.session.commit()
+            db.session.close()
+
     @classmethod
     def get_all_membresias(cls):
         membresias = db.session.query(cls).all()
@@ -313,6 +320,7 @@ class Vehiculos(db.Model):
 
 ########################################  CARGAR COSAS A LA TIENDA  ##############################################################
 
+
 @app.route("/login")
 def login():
     return redirect(
@@ -371,10 +379,6 @@ def authorize():
     return redirect("http://127.0.0.1:5500/Frontend/templates/index.html")
 
 
-
-
-
-
 @app.route("/api/session")
 def check_session():
     steam_id = session.get("steam_id")
@@ -385,9 +389,6 @@ def check_session():
         return {"logged_in": True, "nombre": usuario.nombre}
     else:
         return {"logged_in": False}
-
-
-
 
 
 @app.route("/logout")
@@ -402,6 +403,7 @@ def admin_panel():
     if not steam_id or not is_admin(steam_id):
         return redirect(url_for("home"))
     return render_template("admin.html")
+
 
 def get_steam_profile(steam_id):
     url = f"http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={STEAM_API_KEY}&steamids={steam_id}"
@@ -419,6 +421,7 @@ def get_steam_profile(steam_id):
         print(f"⚠️ Error al contactar Steam: {response.status_code}")
 
     return None
+
 
 ##################### GET ALL PARA TODOS #######################
 @app.route("/get_all_membresias", methods=["GET"])
@@ -515,6 +518,17 @@ def crear_membresia():
 def crear_usuario(steam_id, nombre, ban=0):
     Usuario.crearUsuario(steam_id, nombre, ban)
     return print("Creado con exito!")
+
+
+###################################3
+@app.route("/eliminar_membresia", methods=["POST"])
+def eliminar_memb():
+    data = request.get_json()  # tomo la data del post
+    if not data:
+        return {"error": "No se recibio bien la data"}
+    nombre = data.get("nombre")
+    Membresias.eliminarMembresias(nombre)
+    return jsonify({"mensaje": "Se ha eliminado con exito"})
 
 
 if __name__ == "__main__":
